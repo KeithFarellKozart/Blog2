@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block title %}Index{% endblock %}
+{% block content %}
+<h1>Welcome to my website!</h1>
+<img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="350px">
+<hr>
+    {% for post in posts %}
+    <h2>{{ post.title }}</post></h2>
+    {% if post.author %}<h4>Author: {{ post.user.username }}</h4>{% endif %}
+    <h6>
+      <a href="{{url_for('edit', id=post.id)}}">Edit post</a>
+      <form action="{{url_for('delete', id=post.id)}}" method="post">
+      <button type="submit">Delete</button>
+      </form>
+    </h6>
+    <p>{{ post.text }}</p>
+    {% endfor %}
+    <form method="post" action="{{ url_for('create') }}">
+      <input type="text" name="title" value="your title" minlength="8">
+      <textarea name="text" rows="10" cols="40"></textarea>
+      <button type="submit" style="background-color: red; color: white;">Post</button>
+    </form>
+{% endblock %}
