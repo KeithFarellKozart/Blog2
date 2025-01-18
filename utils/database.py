@@ -9,6 +9,6 @@ Base = declarative_base()
 Base.query = db_session.query_property()
 
 def init_db():
-    from .models import User
+    from .models2 import User
     Base.metadata.create_all(bind=engine)
 
