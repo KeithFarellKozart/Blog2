@@ -1,9 +1,8 @@
-from pydoc import text
 from sqlite3 import IntegrityError
 from flask import Flask, redirect, render_template, request, flash, url_for, session, g, send_from_directory
 from utils.database import db_session
 from werkzeug.security import check_password_hash, generate_password_hash
-from utils.models import User, Post
+from utils.models import User, Post, Comment
 from werkzeug.utils import secure_filename
 from flask_thumbnails import Thumbnail
 import os
@@ -72,9 +71,10 @@ def login():
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-     posts=Post.query.all()
-     return render_template("index.html", posts=posts)
-@app.route("/upload",methods=["POST"])
+     posts = Post.query.all()
+     comments = Comment.query.all()
+     return render_template("index.html", posts=posts,comments=comments)
+# @app.route("/upload",methods=["POST"])
 
 
 @app.before_request
@@ -96,9 +96,6 @@ def create():
      text = request.form.get("text")
      user = g.user
      post = Post(title, text, user.id)
-     print(title)
-     print(text)
-     print(user)
      if text != "" or text is not None:
           db_session.add(post)
           try:
@@ -138,6 +135,8 @@ def delete(id):
      return redirect(url_for("index"))
 def allowed_file(filename):
      return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
 @app.route("/upload/", methods=['GET', 'POST'])
 def upload_file():
     if request.method == 'POST':
@@ -167,3 +166,17 @@ def upload_file():
 @app.route("/uploads/<name>")
 def download_file(name):
      return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+
+@app.post("/comment/<int:id>/")
+def comment(id):
+     title = request.form.get("title")
+     text = request.form.get("text")
+     user = g.user
+     comment = Comment(title, text, user.id, id)
+     if text != "" or text is not None:
+          db_session.add(comment)
+          try:
+               db_session.commit()
+          except:
+               print("help me")
+     return redirect(url_for("index"))

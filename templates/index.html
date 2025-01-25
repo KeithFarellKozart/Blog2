@@ -12,9 +12,19 @@
     <h6>
       <button type="submit"><a href="{{url_for('edit', id=post.id)}}">Edit post</a></button>
       <form action="{{url_for('delete', id=post.id)}}" method="post">
-      <button type="submit">Delete</button>
+        <button type="submit">Delete</button>
       </form>
     </h6>
+    {% for comment in comments %}
+      {% if comment.post == post.id %}
+        <div>{{ comment.text }}</div>
+      {% endif %}
+    {% endfor %}
+<form method="post" action="{{ url_for('comment', id=post.id) }}">
+      <input type="text" name="title" value="your title" minlength="6">
+      <textarea name="text" rows="10" cols="30"></textarea>
+      <button type="submit" style="background-color: blue; color: white;">Comment</button>
+    </form>
 
     {% endfor %}
     <form method="post" action="{{ url_for('create') }}">
