@@ -6,7 +6,7 @@ from utils.models import User, Post, Comment
 from werkzeug.utils import secure_filename
 from flask_thumbnails import Thumbnail
 import os
-UPLOAD_FOLDER = "/home/bigben1234ohio/blog/media"
+UPLOAD_FOLDER = "/home/bigben3/Blog2/media/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp"}
 app = Flask(__name__)
 thumb = Thumbnail(app)
@@ -94,8 +94,18 @@ def shutdown_session(exception=None):
 def create():
      title = request.form.get("title")
      text = request.form.get("text")
+     filename = None
+     if 'file' in request.files:
+          file = request.files['file']
+          if file.filename == '':
+               flash('No selected file')
+               return redirect(url_for('index'))
+          if file and allowed_file(file.filename):
+               filename = secure_filename(file.filename)
+               file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+     
      user = g.user
-     post = Post(title, text, user.id)
+     post = Post(title, text, user.id, filename)
      if text != "" or text is not None:
           db_session.add(post)
           try:
@@ -166,6 +176,7 @@ def upload_file():
 @app.route("/uploads/<name>")
 def download_file(name):
      return send_from_directory(app.config["UPLOAD_FOLDER"], name)
+
 
 @app.post("/comment/<int:id>/")
 def comment(id):

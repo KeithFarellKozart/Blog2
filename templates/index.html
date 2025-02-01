@@ -4,11 +4,13 @@
 {% block content %}
 <h1>Welcome to my website!</h1>
 <img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="200px" width="200px">
+
 <hr>
     {% for post in posts %}
-    {% if post.author %}<h2><img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="90px" width="90px">{{ post.user.username }}</h2>{% endif %}
-    <h4>{{ post.title }}</post></h4>
+    <!-- {% if post.author %}<h2><img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="90px" width="90px">{{ post.user.username }}</h2>{% endif %} -->
+    <h4>{{ post.title }}</h4>
     <p>{{ post.text }}</p>
+    {% if post.image %}<img src="{{ url_for('download_file', name=post.image) }}" alt="">{% endif %}
     <h6>
       <button type="submit"><a href="{{url_for('edit', id=post.id)}}">Edit post</a></button>
       <form action="{{url_for('delete', id=post.id)}}" method="post">
@@ -25,11 +27,13 @@
       <textarea name="text" rows="10" cols="30"></textarea>
       <button type="submit" style="background-color: blue; color: white;">Comment</button>
     </form>
+    <hr>
 
     {% endfor %}
-    <form method="post" action="{{ url_for('create') }}">
+    <form method="post" action="{{ url_for('create') }}" enctype="multipart/form-data">
       <input type="text" name="title" value="your title" minlength="8">
       <textarea name="text" rows="10" cols="40"></textarea>
+      <input type=file name=file>
       <button type="submit" style="background-color: red; color: white;">Post</button>
     </form>
 {% endblock %}
