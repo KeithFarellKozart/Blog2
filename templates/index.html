@@ -2,7 +2,9 @@
 
 {% block title %}Index{% endblock %}
 {% block content %}
-<h1>Welcome to my website!</h1>
+<h1>Welcome to my website!</h1> 
+<button type="submit"><a href="{{url_for('login')}}">Sign in</a></button>
+<button type="submit"><a href="{{url_for('register')}}">Sign up</a></button>
 <img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="200px" width="200px">
 
 <hr>

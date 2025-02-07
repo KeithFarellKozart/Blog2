@@ -6,7 +6,9 @@ from utils.models import User, Post, Comment
 from werkzeug.utils import secure_filename
 from flask_thumbnails import Thumbnail
 import os
-UPLOAD_FOLDER = "/home/bigben3/Blog2/media/"
+# /home/bigben3/Blog2/media/ -main pwd bigben
+# /home/ivan/Blog2/media/ -main pwd home
+UPLOAD_FOLDER = "/home/ivan/Blog2/media/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp"}
 app = Flask(__name__)
 thumb = Thumbnail(app)
