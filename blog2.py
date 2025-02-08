@@ -5,10 +5,10 @@ from werkzeug.security import check_password_hash, generate_password_hash
 from utils.models import User, Post, Comment
 from werkzeug.utils import secure_filename
 from flask_thumbnails import Thumbnail
-import os
+import os 
 # /home/bigben3/Blog2/media/ -main pwd bigben
 # /home/ivan/Blog2/media/ -main pwd home
-UPLOAD_FOLDER = "/home/ivan/Blog2/media/"
+UPLOAD_FOLDER = "/home/bigben3/Blog2/media/"
 ALLOWED_EXTENSIONS = {"txt", "pdf", "png", "jpg", "jpeg", "gif", "webp"}
 app = Flask(__name__)
 thumb = Thumbnail(app)
@@ -19,9 +19,23 @@ app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 def register():
      if request.method == "POST":
           username = request.form.get("username")
-          email = request.form.get("username")
-          password = request.form.get("username")
-          password2 = request.form.get("username")
+          email = request.form.get("email")
+          password = request.form.get("password")
+          password2 = request.form.get("password2")
+          filename = None
+          print(request.files)
+          if 'file' in request.files:
+               file = request.files['file']
+               print("help me")
+               if file.filename == '':
+                    flash('No selected file')
+                    print("filename is empty")
+                    return redirect(url_for('index'))
+               if file and allowed_file(file.filename):
+                    filename = secure_filename(file.filename)
+                    print(filename)
+                    file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+     
           error = ""
 
           if not username:
@@ -32,18 +46,21 @@ def register():
                error = "Email is required"
           elif password != password2:
                error = "Password don't match"
+          print(error)
 
           if error == "":
                user = User(
                     username=username,
                     email=email,
                     password=generate_password_hash(password),
+                    avatar=filename,
                )
                try:
                     db_session.add(user)
                     db_session.commit()
                except IntegrityError:
                     error = "Такой пользователь уже существует"
+                    print(error)
                else:
                     return redirect(url_for("login"))
           flash(error)
@@ -101,7 +118,7 @@ def create():
           file = request.files['file']
           if file.filename == '':
                flash('No selected file')
-               return redirect(url_for('index'))
+               print("test")
           if file and allowed_file(file.filename):
                filename = secure_filename(file.filename)
                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))

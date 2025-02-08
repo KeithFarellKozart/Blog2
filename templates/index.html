@@ -5,23 +5,26 @@
 <h1>Welcome to my website!</h1> 
 <button type="submit"><a href="{{url_for('login')}}">Sign in</a></button>
 <button type="submit"><a href="{{url_for('register')}}">Sign up</a></button>
-<img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="200px" width="200px">
+<img src="{{ url_for('download_file', name='linchik.jpg') }}" alt="" height="200px" width="200px">
 
 <hr>
     {% for post in posts %}
-    <!-- {% if post.author %}<h2><img src="{{ url_for('download_file', name='i.webp') }}" alt="" height="90px" width="90px">{{ post.user.username }}</h2>{% endif %} -->
+    {% if post.user.avatar %}<h2><img src="{{ url_for('download_file', name=post.user.avatar) }}" alt="" height="90px" width="90px" class="avatar" >{{ post.user.username }}</h2>{% endif %}
     <h4>{{ post.title }}</h4>
     <p>{{ post.text }}</p>
-    {% if post.image %}<img src="{{ url_for('download_file', name=post.image) }}" alt="">{% endif %}
+    {% if post.image %}<img src="{{ url_for('download_file', name=post.image) }}" alt="" height="350px" width="300px">{% endif %}
     <h6>
       <button type="submit"><a href="{{url_for('edit', id=post.id)}}">Edit post</a></button>
       <form action="{{url_for('delete', id=post.id)}}" method="post">
         <button type="submit">Delete</button>
       </form>
     </h6>
+    <h7>Comments</h7>
     {% for comment in comments %}
       {% if comment.post == post.id %}
-        <div>{{ comment.text }}</div>
+
+      <div>{% if comment.user.avatar %}<h2><img src="{{ url_for('download_file', name=comment.user.avatar) }}" alt="" height="30px" width="30px" class="avatar" ></h2>{% endif %}
+          <h4>{{ comment.title }}</h4>{{ comment.user.username }} : {{ comment.text }}</div>
       {% endif %}
     {% endfor %}
 <form method="post" action="{{ url_for('comment', id=post.id) }}">

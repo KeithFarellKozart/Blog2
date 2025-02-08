@@ -14,11 +14,12 @@ class User(Base):
 
     posts = relationship("Post", back_populates="user")
     comments = relationship("Comment", back_populates="user")
-
-    def __init__(self, username=None, email=None, password=None):
+        
+    def __init__(self, username=None, email=None, password=None, avatar=None):
         self.username = username
         self.email = email
         self.password = password
+        self.avatar = avatar
         
     def __repr__(self):
         return f'<User {self.username!r}>'

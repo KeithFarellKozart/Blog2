@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>{{ user.username }}</h1>
-{% if user.avatar %}<img src="/uploads/{{ user.avatar }}" alt="avatar">{% endif %}
+<!-- {% if user.avatar %}<img src="/uploads/{{ url_for('download_file', name=register.image) }}" alt="avatar">{% endif %} -->
 
 <form method="post">
     <input type="text" name="avatar" value="enter filename">
