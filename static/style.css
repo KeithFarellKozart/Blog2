@@ -4,6 +4,14 @@ h1 {
 .avatar {
     border-radius: 50%;
 }
+.image{
+    border-radius: 30%;
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: 60%;
+  height: 60%;
+}
 div img{
     float:left;  
     clear:both;    

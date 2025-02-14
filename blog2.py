@@ -201,8 +201,17 @@ def download_file(name):
 def comment(id):
      title = request.form.get("title")
      text = request.form.get("text")
+     filename = None
+     if 'file' in request.files:
+          file = request.files['file']
+          if file.filename == '':
+               flash('No selected file')
+               print("test")
+          if file and allowed_file(file.filename):
+               filename = secure_filename(file.filename)
+               file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
      user = g.user
-     comment = Comment(title, text, user.id, id)
+     comment = Comment(title, text, user.id, id, filename)
      if text != "" or text is not None:
           db_session.add(comment)
           try:
