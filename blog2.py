@@ -1,11 +1,12 @@
 from sqlite3 import IntegrityError
-from flask import Flask, redirect, render_template, request, flash, url_for, session, g, send_from_directory
+from flask import Flask, jsonify, redirect, render_template, flash, url_for, session, g, send_from_directory
 from utils.database import db_session
 from werkzeug.security import check_password_hash, generate_password_hash
 from utils.models import User, Post, Comment
 from werkzeug.utils import secure_filename
 from flask_thumbnails import Thumbnail
 import os 
+import json
 # /home/bigben3/Blog2/media/ -main pwd bigben
 # /home/ivan/Blog2/media/ -main pwd home
 UPLOAD_FOLDER = "/home/bigben3/Blog2/media/"
@@ -15,6 +16,42 @@ thumb = Thumbnail(app)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
+@app.route("/api/v1/users/")
+def users():
+     users = User.query.all()
+     user = users[0]
+     print(user.posts)
+     user = users[0]
+     print(user.comments)
+     # print(user.comments)
+     return jsonify({
+          "users": [
+               {
+                    "username": user.username,
+                    "email": user.email,
+                    "avatar": user.avatar,
+                    "posts": [post.title for post in user.posts],
+                    # "post text": [post.text for post in user.posts],
+                    # "post images": [post.image for post in user.posts],
+                    # "post comments": [post.comments for post in user.posts],
+               }
+               for user in users
+               ]
+     })
+
+
+@app.route("/api/v1/users/<username>/")
+def userApi(username):
+     user = User.query.filter(User.username == username).first()
+     return jsonify ({
+          "user":
+               {
+                    "username": user.username,
+                    "email": user.email,
+                    "avatar": user.avatar,
+                    "posts": [post.title for post in user.posts],
+               }
+     })
 @app.route("/register/", methods=["GET", "POST"])
 def register():
      if request.method == "POST":
