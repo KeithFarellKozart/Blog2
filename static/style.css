@@ -9,8 +9,8 @@ h1 {
     display: block;
   margin-left: auto;
   margin-right: auto;
-  width: 60%;
-  height: 60%;
+  width: 30%;
+  height: 30%;
 }
 div img{
     float:left;  
@@ -18,4 +18,20 @@ div img{
    }
 div img:nth-of-type(2n){
     float:right;
+}
+.button{
+    background-color: #04AA6D; /* Green */
+    border: none;
+    background-color: aqua;
+    padding: 15px 32px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+}
+post.text{
+    display: block;
+  margin-left: auto;
+  margin-right: auto;
+  color: #04AA6D;
 }

@@ -1,5 +1,5 @@
 from sqlite3 import IntegrityError
-from flask import Flask, jsonify, redirect, render_template, flash, url_for, session, g, send_from_directory
+from flask import Flask, request, jsonify, redirect, render_template, flash, url_for, session, g, send_from_directory
 from utils.database import db_session
 from werkzeug.security import check_password_hash, generate_password_hash
 from utils.models import User, Post, Comment
